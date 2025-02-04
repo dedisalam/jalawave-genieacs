@@ -28,7 +28,7 @@ function queryCharts(charts: Record<string, unknown>): Record<string, unknown> {
 export function init(): Promise<Record<string, unknown>> {
   if (!window.authorizer.hasAccess("devices", 1)) {
     return Promise.reject(
-      new Error("You are not authorized to view this page"),
+      new Error("You are not authorized to view this page")
     );
   }
 
@@ -43,7 +43,7 @@ export const component: ClosureComponent = (): Component => {
       for (const group of Object.values(GROUPS)) {
         if (group["label"])
           children.push(
-            m("h1", store.evaluateExpression(group["label"], null)),
+            m("h1", store.evaluateExpression(group["label"], null))
           );
 
         const groupChildren = [];
@@ -52,7 +52,7 @@ export const component: ClosureComponent = (): Component => {
           const chartChildren = [];
           if (chart.label)
             chartChildren.push(
-              m("h2", store.evaluateExpression(chart.label, null)),
+              m("h2", store.evaluateExpression(chart.label, null))
             );
 
           const attrs = {};

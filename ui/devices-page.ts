@@ -28,7 +28,7 @@ const getDownloadUrl = memoize((filter, indexParameters) => {
   const columns = {};
   for (const p of indexParameters)
     columns[store.evaluateExpression(p.label, null) as string] = stringify(
-      p.parameter,
+      p.parameter
     );
   return `api/devices.csv?${m.buildQueryString({
     filter: stringify(filter),
@@ -45,7 +45,7 @@ const unpackSmartQuery = memoize((query) => {
 });
 
 export function init(
-  args: Record<string, unknown>,
+  args: Record<string, unknown>
 ): Promise<Record<string, unknown>> {
   return new Promise((resolve, reject) => {
     if (!window.authorizer.hasAccess("devices", 2))
@@ -81,8 +81,8 @@ function renderActions(selected: Set<string>): Children {
           queueTask(...tasks);
         },
       },
-      "Reboot",
-    ),
+      "Reboot"
+    )
   );
 
   buttons.push(
@@ -99,8 +99,8 @@ function renderActions(selected: Set<string>): Children {
           queueTask(...tasks);
         },
       },
-      "Reset",
-    ),
+      "Reset"
+    )
   );
 
   buttons.push(
@@ -116,8 +116,8 @@ function renderActions(selected: Set<string>): Children {
           });
         },
       },
-      "Push file",
-    ),
+      "Push file"
+    )
   );
 
   buttons.push(
@@ -147,8 +147,8 @@ function renderActions(selected: Set<string>): Children {
           if (--counter === 0) store.setTimestamp(Date.now());
         },
       },
-      "Delete",
-    ),
+      "Delete"
+    )
   );
 
   buttons.push(
@@ -179,8 +179,8 @@ function renderActions(selected: Set<string>): Children {
           if (--counter === 0) store.setTimestamp(Date.now());
         },
       },
-      "Tag",
-    ),
+      "Tag"
+    )
   );
 
   buttons.push(
@@ -192,7 +192,7 @@ function renderActions(selected: Set<string>): Children {
         onclick: () => {
           const ids = Array.from(selected);
           const tag = prompt(
-            `Enter tag to unassign from ${ids.length} devices:`,
+            `Enter tag to unassign from ${ids.length} devices:`
           );
           if (!tag) return;
 
@@ -213,8 +213,8 @@ function renderActions(selected: Set<string>): Children {
           if (--counter === 0) store.setTimestamp(Date.now());
         },
       },
-      "Untag",
-    ),
+      "Untag"
+    )
   );
 
   return buttons;
@@ -254,7 +254,7 @@ export const component: ClosureComponent = (): Component => {
         const _sort = {};
         for (const index of sortedAttrs) {
           const param = memoizedGetSortable(
-            attributes[Math.abs(index) - 1].parameter,
+            attributes[Math.abs(index) - 1].parameter
           );
           _sort[param] = Math.sign(index);
         }
@@ -280,7 +280,7 @@ export const component: ClosureComponent = (): Component => {
         return m.context(
           { device: device, parameter: attr.parameter },
           attr.type || "parameter",
-          attr,
+          attr
         );
       };
 
@@ -302,10 +302,10 @@ export const component: ClosureComponent = (): Component => {
           "a",
           {
             href: `#!/devices/${encodeURIComponent(
-              device["DeviceID.ID"].value[0],
+              device["DeviceID.ID"].value[0]
             )}`,
           },
-          "Show",
+          "Show"
         );
       };
 
@@ -319,7 +319,7 @@ export const component: ClosureComponent = (): Component => {
       };
 
       return [
-        m("h1", "Listing devices"),
+        m("h1", "Listing devices (Development Mode)"),
         m(filterComponent, filterAttrs),
         m("loading", { queries: [devs, count] }, m(indexTableComponent, attrs)),
       ];
