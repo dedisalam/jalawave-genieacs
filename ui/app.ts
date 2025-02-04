@@ -41,6 +41,7 @@ const adminPages = [
   "config",
   "users",
   "permissions",
+  "testing page",
 ];
 
 let state;
@@ -118,7 +119,7 @@ m.route(document.body, "/overview", {
   "/admin/provisions": pagify("provisions", provisionsPage),
   "/admin/virtualParameters": pagify(
     "virtualParameters",
-    virtualParametersPage,
+    virtualParametersPage
   ),
   "/admin/files": pagify("files", filesPage),
   "/admin/config": pagify("config", configPage),
