@@ -156,6 +156,7 @@ export interface File {
     oui?: string;
     productClass?: string;
     version?: string;
+    serialNumber?: string;
   };
 }
 

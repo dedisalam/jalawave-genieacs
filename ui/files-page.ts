@@ -36,6 +36,7 @@ const attributes: {
   },
   { id: "metadata.oui", label: "OUI" },
   { id: "metadata.productClass", label: "Product Class" },
+  { id: "metadata.serialNumber", label: "Serial Number" },
   { id: "metadata.version", label: "Version" },
 ];
 
@@ -58,13 +59,13 @@ function upload(
   file: File,
   headers: Record<string, string>,
   abortSignal?: AbortSignal,
-  progressListener?: (e: ProgressEvent) => void,
+  progressListener?: (e: ProgressEvent) => void
 ): Promise<void> {
   headers = Object.assign(
     {
       "Content-Type": "application/octet-stream",
     },
-    headers,
+    headers
   );
   return store.xhrRequest({
     method: "PUT",
@@ -93,11 +94,11 @@ const getDownloadUrl = memoize((filter) => {
 });
 
 export function init(
-  args: Record<string, unknown>,
+  args: Record<string, unknown>
 ): Promise<Record<string, unknown>> {
   if (!window.authorizer.hasAccess("files", 2)) {
     return Promise.reject(
-      new Error("You are not authorized to view this page"),
+      new Error("You are not authorized to view this page")
     );
   }
 
@@ -217,7 +218,7 @@ export const component: ClosureComponent = (): Component => {
                               file,
                               headers,
                               abortController.signal,
-                              progressListener,
+                              progressListener
                             );
                             store.setTimestamp(Date.now());
                             notifications.push("success", "File created");
@@ -228,8 +229,8 @@ export const component: ClosureComponent = (): Component => {
                           progress = -1;
                         },
                       },
-                      formData,
-                    ),
+                      formData
+                    )
                   );
                   cb = () => {
                     if (progress < 0) return [null, comp];
@@ -238,7 +239,7 @@ export const component: ClosureComponent = (): Component => {
                         "div.progress",
                         m("div.progress-bar", {
                           style: `width: ${Math.trunc(progress * 100)}%`,
-                        }),
+                        })
                       ),
                       comp,
                     ];
@@ -254,7 +255,7 @@ export const component: ClosureComponent = (): Component => {
                   });
                 },
               },
-              "New",
+              "New"
             ),
             m(
               "button.primary",
@@ -271,13 +272,13 @@ export const component: ClosureComponent = (): Component => {
                   e.target.disabled = true;
                   Promise.all(
                     Array.from(selected).map((id) =>
-                      store.deleteResource("files", id),
-                    ),
+                      store.deleteResource("files", id)
+                    )
                   )
                     .then((res) => {
                       notifications.push(
                         "success",
-                        `${res.length} files deleted`,
+                        `${res.length} files deleted`
                       );
                       store.setTimestamp(Date.now());
                     })
@@ -287,7 +288,7 @@ export const component: ClosureComponent = (): Component => {
                     });
                 },
               },
-              "Delete",
+              "Delete"
             ),
           ];
         };
@@ -305,7 +306,7 @@ export const component: ClosureComponent = (): Component => {
         m(
           "loading",
           { queries: [files, count] },
-          m(indexTableComponent, attrs),
+          m(indexTableComponent, attrs)
         ),
       ];
     },
