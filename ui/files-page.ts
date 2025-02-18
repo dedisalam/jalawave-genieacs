@@ -193,6 +193,8 @@ export const component: ClosureComponent = (): Component => {
                             "metadata-oui": obj["metadata.oui"] || "",
                             "metadata-productclass":
                               obj["metadata.productClass"] || "",
+                            "metadata-serialNumber":
+                              obj["metadata.serialNumber"] || "",
                             "metadata-version": obj["metadata.version"] || "",
                           };
 
