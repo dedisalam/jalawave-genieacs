@@ -319,7 +319,7 @@ export const component: ClosureComponent = (): Component => {
       };
 
       return [
-        m("h1", "Listing devices (Development Mode)"),
+        m("h1", "Listing devices (Development Mode 2)"),
         m(filterComponent, filterAttrs),
         m("loading", { queries: [devs, count] }, m(indexTableComponent, attrs)),
       ];
