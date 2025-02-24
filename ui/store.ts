@@ -93,7 +93,7 @@ function checkConnection(): void {
           connectionNotification = notifications.push(
             "warning",
             "Server is unreachable",
-            {},
+            {}
           );
         }
       } else {
@@ -108,7 +108,7 @@ function checkConnection(): void {
           if (Math.abs(skew - clockSkew) > 5000 && now2 - now1 < 1000) {
             clockSkew = skew;
             console.warn(
-              `System and server clocks are out of sync. Adding ${clockSkew}ms offset to any client-side time relative calculations.`,
+              `System and server clocks are out of sync. Adding ${clockSkew}ms offset to any client-side time relative calculations.`
             );
             setTimestamp(now2);
             m.redraw();
@@ -134,7 +134,7 @@ function checkConnection(): void {
                 Reload: () => {
                   window.location.reload();
                 },
-              },
+              }
             );
           }
         }
@@ -151,7 +151,7 @@ function checkConnection(): void {
                 Reload: () => {
                   window.location.reload();
                 },
-              },
+              }
             );
           }
         }
@@ -165,14 +165,14 @@ function checkConnection(): void {
 setInterval(checkConnection, 3000);
 
 export async function xhrRequest(
-  options: { url: string } & m.RequestOptions<unknown>,
+  options: { url: string } & m.RequestOptions<unknown>
 ): Promise<any> {
   const extract = options.extract;
   const deserialize = options.deserialize;
 
   options.extract = (
     xhr: XMLHttpRequest,
-    _options?: { url: string } & m.RequestOptions<unknown>,
+    _options?: { url: string } & m.RequestOptions<unknown>
   ): any => {
     if (typeof extract === "function") return extract(xhr, _options);
 
@@ -194,7 +194,7 @@ export async function xhrRequest(
       response = deserialize(xhr.responseText);
     } else if (
       (xhr.getResponseHeader("content-type") || "").startsWith(
-        "application/json",
+        "application/json"
       )
     ) {
       try {
@@ -280,7 +280,7 @@ function findMatches(resourceType, filter, sort, limit): any[] {
 export function fetch(
   resourceType: string,
   filter: Expression,
-  options: { limit?: number; sort?: { [param: string]: number } } = {},
+  options: { limit?: number; sort?: { [param: string]: number } } = {}
 ): QueryResponse {
   const filterStr = memoizedStringify(filter);
   const sort = Object.assign({}, options.sort);
@@ -302,13 +302,14 @@ export function fetch(
   const [satisfied, diff] = paginate(
     resources[resourceType].combinedFilter,
     unpackExpression(filter),
-    sort,
+    sort
   );
   const matches = findMatches(resourceType, satisfied, sort, limit);
   queries.value.set(queryResponse, matches);
   if (!diff || (limit && matches.length >= limit))
     queries.fulfilled.set(queryResponse, fulfillTimestamp);
   else queries.unsatisfied.set(queryResponse, diff);
+  console.log(queryResponse);
   return queryResponse;
 }
 
@@ -342,7 +343,7 @@ export function fulfill(accessTimestamp: number): void {
                 throw new Error("Server is unreachable");
               } else if (xhr.status !== 200) {
                 throw new Error(
-                  `Unexpected response status code ${xhr.status}`,
+                  `Unexpected response status code ${xhr.status}`
                 );
               }
               return +xhr.getResponseHeader("x-total-count");
@@ -352,7 +353,7 @@ export function fulfill(accessTimestamp: number): void {
             queries.value.set(queryResponse, c);
             queries.fulfilled.set(queryResponse, fulfillTimestamp);
             queries.fulfilling.delete(queryResponse);
-          }),
+          })
         );
       }
     }
@@ -405,7 +406,7 @@ export function fulfill(accessTimestamp: number): void {
               } else {
                 queries.bookmark.delete(queryResponse);
               }
-            }),
+            })
           );
         }
       }
@@ -431,7 +432,7 @@ export function fulfill(accessTimestamp: number): void {
 
         const [union, diff] = unionDiff(
           resources[resourceType].combinedFilter,
-          combinedFilter,
+          combinedFilter
         );
 
         if (!diff) {
@@ -440,7 +441,7 @@ export function fulfill(accessTimestamp: number): void {
             filter = memoizedEvaluate(
               filter,
               null,
-              fulfillTimestamp + clockSkew,
+              fulfillTimestamp + clockSkew
             );
             const limit = queries.limit.get(queryResponse);
             const bookmark = queries.bookmark.get(queryResponse);
@@ -450,7 +451,7 @@ export function fulfill(accessTimestamp: number): void {
 
             queries.value.set(
               queryResponse,
-              findMatches(resourceType, filter, sort, limit),
+              findMatches(resourceType, filter, sort, limit)
             );
             queries.fulfilled.set(queryResponse, fulfillTimestamp);
             queries.fulfilling.delete(queryResponse);
@@ -504,12 +505,12 @@ export function fulfill(accessTimestamp: number): void {
 
               queries.value.set(
                 queryResponse,
-                findMatches(resourceType, filter, sort, limit),
+                findMatches(resourceType, filter, sort, limit)
               );
               queries.fulfilled.set(queryResponse, fulfillTimestamp);
               queries.fulfilling.delete(queryResponse);
             }
-          }),
+          })
         );
       }
       if (updated) m.redraw();
@@ -538,7 +539,7 @@ export function getClockSkew(): number {
 
 export function postTasks(
   deviceId: string,
-  tasks: QueueTask[],
+  tasks: QueueTask[]
 ): Promise<string> {
   const tasks2: Task[] = [];
   for (const t of tasks) {
@@ -571,7 +572,7 @@ export function postTasks(
 
 export function updateTags(
   deviceId: string,
-  tags: Record<string, boolean>,
+  tags: Record<string, boolean>
 ): Promise<void> {
   return xhrRequest({
     method: "POST",
@@ -582,7 +583,7 @@ export function updateTags(
 
 export function deleteResource(
   resourceType: string,
-  id: string,
+  id: string
 ): Promise<void> {
   return xhrRequest({
     method: "DELETE",
@@ -593,7 +594,7 @@ export function deleteResource(
 export function putResource(
   resourceType: string,
   id: string,
-  object: Record<string, unknown>,
+  object: Record<string, unknown>
 ): Promise<void> {
   for (const k in object) if (object[k] === undefined) object[k] = null;
 
@@ -636,7 +637,7 @@ export function resourceExists(resource: string, id: string): Promise<number> {
 
 export function evaluateExpression(
   exp: Expression,
-  obj: Record<string, unknown>,
+  obj: Record<string, unknown>
 ): Expression {
   if (!Array.isArray(exp)) return exp;
   return memoizedEvaluate(exp, obj, fulfillTimestamp + clockSkew);
@@ -645,7 +646,7 @@ export function evaluateExpression(
 export function changePassword(
   username: string,
   newPassword: string,
-  authPassword?: string,
+  authPassword?: string
 ): Promise<void> {
   const body = { newPassword };
   if (authPassword) body["authPassword"] = authPassword;
