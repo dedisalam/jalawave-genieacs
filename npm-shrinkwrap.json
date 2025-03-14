@@ -1,11 +1,11 @@
 {
-  "name": "genieacs",
+  "name": "jalawave-genieacs",
   "version": "1.2.13",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
-      "name": "genieacs",
+      "name": "jalawave-genieacs",
       "version": "1.2.13",
       "license": "AGPL-3.0",
       "dependencies": {
