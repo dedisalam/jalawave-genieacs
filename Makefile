@@ -1,4 +1,4 @@
 all:
-	docker image rm dedisalam/genieacs || true
-	docker build --no-cache -t dedisalam/genieacs .
-	docker push dedisalam/genieacs
+	docker image rm dedisalam/jalawave-genieacs || true
+	docker build --no-cache -t dedisalam/jalawave-genieacs .
+	docker push dedisalam/jalawave-genieacs
