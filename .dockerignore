@@ -1,0 +1,19 @@
+node_modules
+ui
+test
+lib
+docs
+build
+CHANGELOG.md
+CONTRIBUTING.md
+Dockerfile
+Dockerfile copy
+LICENSE
+Makefile
+README.md
+bin
+docker-compose-3.yaml
+docker-compose.yaml
+npm-shrinkwrap.json
+tsconfig.json
+public
