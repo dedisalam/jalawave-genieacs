@@ -46,15 +46,15 @@ async function getBody(request: IncomingMessage): Promise<Buffer> {
 
 export async function listener(
   request: IncomingMessage,
-  response: ServerResponse,
+  response: ServerResponse
 ): Promise<void> {
   response.setHeader("GenieACS-Version", VERSION);
-  response.setHeader("Access-Control-Allow-Origin", "*")
+  response.setHeader("Access-Control-Allow-Origin", "*");
 
   const origin = getRequestOrigin(request);
   const url = new URL(
     request.url,
-    (origin.encrypted ? "https://" : "http://") + origin.host,
+    (origin.encrypted ? "https://" : "http://") + origin.host
   );
 
   const body = await getBody(request).catch(() => null);
@@ -65,7 +65,7 @@ export async function listener(
     Object.assign({}, Object.fromEntries(url.searchParams), {
       remoteAddress: origin.remoteAddress,
       message: `${request.method} ${url.pathname}`,
-    }),
+    })
   );
   return handler(request, response, url, body);
 }
@@ -74,7 +74,7 @@ async function handler(
   request: IncomingMessage,
   response: ServerResponse,
   url: URL,
-  body: Buffer,
+  body: Buffer
 ): Promise<void> {
   if (PRESETS_REGEX.test(url.pathname)) {
     const presetName = decodeURIComponent(PRESETS_REGEX.exec(url.pathname)[1]);
@@ -132,7 +132,7 @@ async function handler(
     }
   } else if (PROVISIONS_REGEX.test(url.pathname)) {
     const provisionName = decodeURIComponent(
-      PROVISIONS_REGEX.exec(url.pathname)[1],
+      PROVISIONS_REGEX.exec(url.pathname)[1]
     );
     if (request.method === "PUT") {
       const object = {
@@ -165,7 +165,7 @@ async function handler(
     }
   } else if (VIRTUAL_PARAMETERS_REGEX.test(url.pathname)) {
     const virtualParameterName = decodeURIComponent(
-      VIRTUAL_PARAMETERS_REGEX.exec(url.pathname)[1],
+      VIRTUAL_PARAMETERS_REGEX.exec(url.pathname)[1]
     );
     if (request.method === "PUT") {
       const object = {
@@ -184,7 +184,7 @@ async function handler(
       await collections.virtualParameters.replaceOne(
         { _id: virtualParameterName },
         object,
-        { upsert: true },
+        { upsert: true }
       );
       await cache.del("cwmp-local-cache-hash");
       response.writeHead(200);
@@ -207,7 +207,7 @@ async function handler(
     if (request.method === "POST") {
       const updateRes = await collections.devices.updateOne(
         { _id: deviceId },
-        { $addToSet: { _tags: tag } },
+        { $addToSet: { _tags: tag } }
       );
 
       if (!updateRes.matchedCount) {
@@ -221,7 +221,7 @@ async function handler(
     } else if (request.method === "DELETE") {
       const updateRes = await collections.devices.updateOne(
         { _id: deviceId },
-        { $pull: { _tags: tag } },
+        { $pull: { _tags: tag } }
       );
 
       if (!updateRes.matchedCount) {
@@ -259,7 +259,7 @@ async function handler(
   } else if (DEVICE_TASKS_REGEX.test(url.pathname)) {
     if (request.method === "POST") {
       const deviceId = decodeURIComponent(
-        DEVICE_TASKS_REGEX.exec(url.pathname)[1],
+        DEVICE_TASKS_REGEX.exec(url.pathname)[1]
       );
 
       const conReq = url.searchParams.has("connection_request");
@@ -296,7 +296,7 @@ async function handler(
         } else {
           const status = await apiFunctions.connectionRequest(
             deviceId,
-            flattenDevice(dev),
+            flattenDevice(dev)
           );
           if (status) {
             response.writeHead(504, status);
@@ -376,7 +376,7 @@ async function handler(
               }
             }
             return exp;
-          },
+          }
         ) as number;
       }
 
@@ -385,14 +385,14 @@ async function handler(
         const sessionStarted = await apiFunctions.awaitSessionStart(
           deviceId,
           lastInform,
-          onlineThreshold,
+          onlineThreshold
         );
         if (!sessionStarted) {
           status = "Task queued but not processed";
         } else {
           const sessionEnded = await apiFunctions.awaitSessionEnd(
             deviceId,
-            120000,
+            120000
           );
           if (!sessionEnded) {
             status = "Task queued but not processed";
@@ -427,7 +427,7 @@ async function handler(
       if (request.method === "DELETE") {
         const task = await collections.tasks.findOne(
           { _id: new ObjectId(taskId) },
-          { projection: { device: 1 } },
+          { projection: { device: 1 } }
         );
 
         if (!task) {
@@ -463,7 +463,7 @@ async function handler(
       if (request.method === "POST") {
         const task = await collections.tasks.findOne(
           { _id: new ObjectId(taskId) },
-          { projection: { device: 1 } },
+          { projection: { device: 1 } }
         );
 
         const deviceId = task.device;
@@ -512,7 +512,7 @@ async function handler(
           filename,
           {
             metadata: metadata,
-          },
+          }
         );
 
         uploadStream.on("error", reject);
@@ -571,7 +571,7 @@ async function handler(
     }
 
     const deviceId = decodeURIComponent(
-      DELETE_DEVICE_REGEX.exec(url.pathname)[1],
+      DELETE_DEVICE_REGEX.exec(url.pathname)[1]
     );
 
     try {
