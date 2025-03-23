@@ -50,6 +50,7 @@ export async function listener(
 ): Promise<void> {
   response.setHeader("GenieACS-Version", VERSION);
   response.setHeader("Access-Control-Allow-Origin", "*");
+  response.setHeader("Access-Control-Allow-Method", "*");
 
   const origin = getRequestOrigin(request);
   const url = new URL(
