@@ -50,7 +50,6 @@ export async function listener(
 ): Promise<void> {
   response.setHeader("GenieACS-Version", VERSION);
   response.setHeader("Access-Control-Allow-Origin", "*");
-  response.setHeader("Access-Control-Allow-Method", "*");
 
   const origin = getRequestOrigin(request);
   const url = new URL(
@@ -416,6 +415,13 @@ async function handler(
         response.writeHead(200, { "Content-Type": "application/json" });
         response.end(JSON.stringify(task));
       }
+    } else if (request.method === "OPTIONS") {
+      response.writeHead(200, {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      });
+      response.end();
     } else {
       response.writeHead(405, { Allow: "POST" });
       response.end("405 Method Not Allowed");
