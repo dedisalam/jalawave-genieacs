@@ -1,7 +1,7 @@
 name: jalawave
 services:
   jalawave-database-mongo:
-    image: mongo 
+    image: mongo
     container_name: jalawave-database-mongo
     environment:
       - MONGO_INITDB_ROOT_USERNAME=jalawave
@@ -9,8 +9,6 @@ services:
       - MONGO_INITDB_DATABASE=genieacs
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/var/log/mongodb
-    ports:
-      - "27017:27017"
     volumes:
       - jalawave-database-mongo:/data/db
       - jalawave-database-mongo-config:/data/configdb
